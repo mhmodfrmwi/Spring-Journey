@@ -8,11 +8,15 @@ import com.example.products.repos.CustomerRepository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
@@ -50,5 +54,28 @@ public class CustomerController {
     @DeleteMapping("/customers/{id}")
     public void deleteCustomer(@PathVariable int id) {
         customerRepository.deleteById(id);
+    }
+
+    @GetMapping("/customers/search")
+    public Page<Customer> searchCustomers(
+            @RequestParam(required = false) String accountNumber,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String department,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size){
+         Pageable pageable = PageRequest.of(page, size);
+
+        if (accountNumber != null) {
+            return customerRepository.findByAccountNumber(accountNumber,pageable);
+        } else if (firstName != null) {
+                return customerRepository.findByFirstName(firstName, pageable);
+        }else if (lastName != null) {
+            return customerRepository.findByLastName(lastName,pageable);
+        }
+         else if (department != null) {
+            return customerRepository.findByDepartment(department,pageable);
+        }
+        return customerRepository.findAll(pageable);
     }
 }

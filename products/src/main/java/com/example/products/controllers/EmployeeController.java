@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.products.models.Employee;
+import com.example.products.models.EmployeeFullName;
+import com.example.products.models.EmployeeFullNameView;
+import com.example.products.models.EmployeeView;
 import com.example.products.repos.EmployeeRepository;
 
 @RestController
@@ -22,8 +25,8 @@ public class EmployeeController {
     public EmployeeController() {
     }
     @GetMapping("/employees")
-    public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+    public List<EmployeeFullName> getAllEmployeeFullNames() {
+        return employeeRepository.findAllEmployeeFullNames();
     }
     
     @GetMapping("/employees/{id}")
@@ -45,6 +48,10 @@ public class EmployeeController {
             return employeeRepository.save(employee);
         }
         return null;
+    }
+    @GetMapping("/employees/search/{lastName}")
+    public EmployeeFullNameView getEmployeeByPosition(@PathVariable String lastName) {
+        return employeeRepository.findByLastName(lastName);
     }
     @DeleteMapping("/employees/{id}")
     public void deleteEmployee(@PathVariable int id) {
