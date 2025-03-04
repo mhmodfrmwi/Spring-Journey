@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.products.models.Employee;
 import com.example.products.models.EmployeeFullName;
 import com.example.products.models.EmployeeFullNameView;
-import com.example.products.models.EmployeeView;
 import com.example.products.repos.EmployeeRepository;
 
 @RestController
